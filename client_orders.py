@@ -189,6 +189,24 @@ def check_new_orders_with_user(client_email, password):
                     structured_message['uid'] = str(uid)
                     structured_message['subject'] = message.subject
                     structured_message['body'] = temp
+                    if(len(message.attachments) != 0):
+                        dwd_path = ''
+                        for idx, attachment in enumerate(message.attachments):
+                            print('here')
+                            att_fn = attachment.get('filename')
+                            print(att_fn)
+                            download_path = f"{download_folder}/{att_fn}"
+                            dwd_path = download_path
+                            # print(download_path)
+                            with open(download_path, "wb") as fp:
+                                fp.write(attachment.get('content').read())
+                            
+                        connection = MongoClient('localhost', 27017)
+                        database = connection['Client_Orders']
+                        fs = gridfs.GridFS(database=database)
+                        with open(dwd_path, 'rb') as f:
+                            contents = f.read()
+                            fs.put(contents, filename = str(uid))
                     structured_message['date'] = message.date
                     orders.append(structured_message)
             

@@ -10,7 +10,7 @@ def check_mail():
     with Imbox(
             'imap.gmail.com',
             username='sanjeetnaik11@gmail.com',
-            password='Mastexas2023',
+            password='password',
             ssl=True,
             ssl_context=None,
             starttls=False) as imbox:
